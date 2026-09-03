@@ -1,0 +1,180 @@
+{
+  "name": "symbolgo",
+  "displayName": "SymbolGo",
+  "description": "增强前端项目的代码跳转能力：Vue / HTML / JSX 的 class、id 跳转到样式定义，组件跳转到组件文件，以及 CSS / SCSS / Sass / Less 内部符号跳转。",
+  "version": "0.1.0",
+  "publisher": "symbolgo",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "vue",
+    "react",
+    "scss",
+    "less",
+    "definition"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:vue",
+    "onLanguage:html",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescriptreact",
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:css",
+    "onLanguage:scss",
+    "onLanguage:sass",
+    "onLanguage:less",
+    "workspaceContains:**/*.vue",
+    "workspaceContains:**/*.sass"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "symbolgo.rebuildIndex",
+        "title": "SymbolGo: 重建索引",
+        "category": "SymbolGo"
+      },
+      {
+        "command": "symbolgo.showIndexStats",
+        "title": "SymbolGo: 查看索引状态",
+        "category": "SymbolGo"
+      },
+      {
+        "command": "symbolgo.showOutput",
+        "title": "SymbolGo: 打开日志输出",
+        "category": "SymbolGo"
+      }
+    ],
+    "configuration": {
+      "title": "SymbolGo",
+      "properties": {
+        "symbolgo.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "启用 SymbolGo 的跳转能力。"
+        },
+        "symbolgo.include": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/*.{css,scss,sass,less,vue,html,htm,js,jsx,ts,tsx,mjs,cjs,mts,cts}"
+          ],
+          "description": "参与索引的文件 glob。"
+        },
+        "symbolgo.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/node_modules/**",
+            "**/dist/**",
+            "**/build/**",
+            "**/out/**",
+            "**/.next/**",
+            "**/.nuxt/**",
+            "**/.output/**",
+            "**/coverage/**",
+            "**/.git/**",
+            "**/*.min.css",
+            "**/*.min.js"
+          ],
+          "description": "排除索引的文件 glob。"
+        },
+        "symbolgo.maxFiles": {
+          "type": "number",
+          "default": 20000,
+          "description": "参与索引的最大文件数，超出后停止扫描以保护性能。"
+        },
+        "symbolgo.maxFileSizeKB": {
+          "type": "number",
+          "default": 1024,
+          "description": "单个文件参与索引的体积上限（KB），超出则跳过。"
+        },
+        "symbolgo.style.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "启用 class / id 跳转到样式定义。"
+        },
+        "symbolgo.style.scope": {
+          "type": "string",
+          "enum": [
+            "smart",
+            "related",
+            "workspace"
+          ],
+          "enumDescriptions": [
+            "优先返回当前文件与其直接关联样式中的定义，找不到时回退到整个工作区",
+            "只返回当前文件与其直接关联样式（<style> 块、style src、import 的样式文件）中的定义",
+            "始终返回整个工作区中的所有同名定义"
+          ],
+          "default": "smart",
+          "description": "class / id 定义的查找范围策略。"
+        },
+        "symbolgo.component.mode": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "always",
+            "off"
+          ],
+          "enumDescriptions": [
+            "仅在无法通过当前文件的 import 语句解析时才介入（避免与内置 JS/TS 跳转重复）",
+            "总是提供组件跳转结果",
+            "关闭组件跳转"
+          ],
+          "default": "auto",
+          "description": "组件跳转策略。"
+        },
+        "symbolgo.hover.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "在悬停提示中显示 SymbolGo 来源标识与定义预览。"
+        },
+        "symbolgo.alias": {
+          "type": "object",
+          "default": {},
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "额外的路径别名映射，例如 { \"@\": \"src\", \"~@\": \"src\" }。会与 tsconfig / jsconfig 的 paths 合并。"
+        },
+        "symbolgo.trace": {
+          "type": "boolean",
+          "default": false,
+          "description": "输出详细调试日志到 SymbolGo 输出面板。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "watch": "node scripts/build.mjs --watch",
+    "compile": "tsc -p tsconfig.test.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm run compile && node --test \"out/test/*.test.js\"",
+    "vscode:prepublish": "node scripts/build.mjs --production",
+    "test:integration": "pnpm run compile && node scripts/build.mjs && node scripts/run-integration.mjs",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package --no-dependencies --allow-missing-repository"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^8.15.0",
+    "@typescript-eslint/parser": "^8.15.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.24.0",
+    "eslint": "^8.57.1",
+    "typescript": "^5.7.2"
+  }
+}

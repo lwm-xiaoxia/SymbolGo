@@ -1,0 +1,17 @@
+@use "../styles/variables" as vars;
+
+.home-page {
+  padding: 16px;
+
+  &__header {
+    font-weight: 600;
+  }
+
+  &--compact .home-page__header {
+    font-weight: 400;
+  }
+}
+
+#app-root {
+  min-height: 100vh;
+}

@@ -1,0 +1,15 @@
+@primary: #0066ff;
+@radius: 4px;
+
+.bordered(@width: 1px) {
+  border: @width solid @primary;
+}
+
+.panel {
+  border-radius: @radius;
+
+  &__header {
+    .bordered(2px);
+    color: @primary;
+  }
+}

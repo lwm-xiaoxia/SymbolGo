@@ -1,0 +1,17 @@
+$primary: #0066ff;
+$gap: 8px;
+
+@mixin button-base($size: 12px) {
+  padding: $size;
+  border: 0;
+}
+
+%visually-hidden {
+  position: absolute;
+  clip: rect(0 0 0 0);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

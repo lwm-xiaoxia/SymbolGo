@@ -1,0 +1,6 @@
+allowBuilds:
+  esbuild: true
+  '@vscode/vsce-sign': false
+  keytar: false
+onlyBuiltDependencies:
+  - esbuild

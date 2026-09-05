@@ -2,7 +2,7 @@
   "name": "symbolgo",
   "displayName": "SymbolGo",
   "description": "增强前端项目的代码跳转能力：Vue / HTML / JSX 的 class、id 跳转到样式定义，组件跳转到组件文件，以及 CSS / SCSS / Sass / Less 内部符号跳转。",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "publisher": "symbolgo",
   "license": "MIT",
   "repository": {
